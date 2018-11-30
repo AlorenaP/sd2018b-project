@@ -6,7 +6,9 @@
 **Curso:** Sistemas Distribuidos  
 **Docente:** Daniel Barragán C.  
 **Tema:**  Kubernetes  
-**Correo:** daniel.barragan at correo.icesi.edu.co
+**Estudiante:** Angie Lorena Pérez
+**Codigo:** A00242068
+**Git:** https://github.com/AlorenaP/sd2018b-project/tree/lorenaP/project
 
 ### Objetivos
 * Identificar los componentes de un cluster de kubernetes
@@ -66,20 +68,30 @@ una vez se hace la configuración se hace vangrant up para verificar el desplieg
 con Kubernetes ya instalado se procede a crear los pods por medio del comando 
 
 
-```kubectl run maquina1 --image=nginx --port=80
+```
+
+kubectl run maquina1 --image=nginx --port=80
+
+
 ```
 al ejecutarse se va a mostrar el replication controller que se va a encargar de gestionar el pod, asegura que el pod esté siempre disponible, de modo que si hay muchos pods eliminará algunos y si hay pocos crear nuevos.
 
-a través del replication controller también se pueden crear las réplicas que se desen del grupo de pods que se tengan con el comando
+A través del replication controller también se pueden crear las réplicas que se desen del grupo de pods que se tengan con el comando:
 
 
-```kubectl scale rc nombre-del-pod --replicas=2
 ```
 
-para eliminarlos
+kubectl scale rc nombre-del-pod --replicas=2
+
+```
+
+Para eliminarlos:
 
 
-```kubectl delete rc nombre
+```
+
+kubectl delete rc nombre
+
 ```
 
 Ahora una forma para que un pod se pueda comunicar con otro pod, es por medio de un servicio que lo haga accesible.
