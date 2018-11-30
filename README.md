@@ -6,8 +6,8 @@
 **Curso:** Sistemas Distribuidos  
 **Docente:** Daniel Barragán C.  
 **Tema:**  Kubernetes  
-**Estudiante:** Angie Lorena Pérez
-**Codigo:** A00242068
+**Estudiante:** Angie Lorena Pérez  
+**Codigo:** A00242068  
 **Git:** https://github.com/AlorenaP/sd2018b-project/tree/lorenaP/project
 
 ### Objetivos
