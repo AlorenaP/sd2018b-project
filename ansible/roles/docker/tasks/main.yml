@@ -1,0 +1,7 @@
+---
+
+# file: roles/docker/tasks/main.yml
+
+#- include: docker_prerequisites.yml
+- include: docker_setup.yml
+- include: docker_install.yml

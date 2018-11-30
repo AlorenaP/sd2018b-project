@@ -1,0 +1,61 @@
+---
+
+# file: roles/kubernetes/tasks/main.yml
+
+- name: "Create ssh key for this machine (Necesary to start kubernetes)"
+  user: name=root generate_ssh_key=yes
+  register: user_var
+
+- name: Add key to authorized keys
+  become: yes
+  shell: "cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys"
+
+- name: Download Kubernetes release bundle
+  become: yes
+  get_url: >
+    url="https://github.com/GoogleCloudPlatform/kubernetes/releases/download/v1.2.0/kubernetes.tar.gz"
+    dest="{{kubernetes.temporal_path}}/kubernetes.tar.gz"
+
+- name: Untar the kubernetes bundle
+  become: yes
+  unarchive: >
+    src="{{kubernetes.temporal_path}}/kubernetes.tar.gz"
+    dest={{kubernetes.path}} copy=no
+
+- name: Unarchive salbase tar to configure the cluster.
+  become: yes
+  unarchive: >-
+    src={{kubernetes.path}}/kubernetes/server/kubernetes-salt.tar.gz
+    dest={{kubernetes.path}}/kubernetes/cluster
+    copy=no
+
+- name: "Move saltbase directory outside the unarchive directory"
+  become: yes
+  shell: "mv {{kubernetes.path}}/kubernetes/cluster/kubernetes/saltbase {{kubernetes.path}}/kubernetes/cluster"
+  register: result
+  failed_when: "'Directory not empty' not in result.stderr and '' != result.stderr"
+
+- name: Delete empty directory
+  become: yes
+  file: >-
+    path={{kubernetes.path}}/kubernetes/cluster/kubernetes
+    state=absent
+
+- name: Setup default configuration
+  become: yes
+  copy: >
+    src=config-default.sh
+    dest={{kubernetes.path}}/kubernetes/cluster/ubuntu
+    mode="0755"
+    force=yes
+
+- name: Start cluster
+  become: yes
+  shell: KUBERNETES_PROVIDER=ubuntu ./kube-up.sh chdir={{kubernetes.path}}/kubernetes/cluster
+  register: result
+  failed_when: "'Done! All your binaries locate in' not in result.stdout"
+
+- name: Add kube-system namespace
+  become: yes
+  shell: ./kubectl create -f /opt/kubernetes/cluster/ubuntu/namespace.yaml chdir=/opt/kubernetes/cluster/ubuntu/binaries
+  ignore_errors: yes

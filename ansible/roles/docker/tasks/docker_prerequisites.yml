@@ -1,0 +1,36 @@
+---
+
+# file: roles/docker/tasks/docker_prerequisites.yml
+
+- name: install Ensure that apt works with https method and CA certificates are installed
+  apt: >
+    name="{{ item }}"
+    state=latest
+    update_cache=yes
+  with_items:
+      - apt-transport-https
+      - ca-certificates
+
+- name: Add GPG key
+  command: sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: Copy dokcer.list
+  copy: >
+    src=docker.list
+    dest=/etc/apt/sources.list.d
+    force=yes
+
+#- name: Purge old repo if exists
+#  apt: >
+#    name=lxc-docker
+#    purge=yes
+#    update_cache=yes
+
+# TODO: Poner luego
+#- name: Install the recommended package to use the aufs storage driver.
+#  shell: "apt-get install linux-image-extra-$(uname -r)"
+
+- name: Install appsrmor package
+  apt: >
+    name=apparmor
+    update_cache=yes

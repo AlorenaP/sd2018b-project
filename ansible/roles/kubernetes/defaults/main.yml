@@ -1,0 +1,3 @@
+kubernetes:
+    path: /opt
+    temporal_path: /tmp

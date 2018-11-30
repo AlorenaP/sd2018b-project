@@ -1,0 +1,9 @@
+---
+
+# file: roles/docker/tasks/docker_setup.yml
+
+- name: create docker group
+  group: name=docker state=present
+
+- name: create docker user
+  user: name=docker group=docker state=present

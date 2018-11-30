@@ -1,0 +1,14 @@
+---
+
+# file: roles/docker/tasks/docker_install.yml
+
+- name: install docker
+  apt: >
+    name="docker-engine"
+    state=latest
+    update_cache=yes
+
+
+- name: ensure docker is running and enabled as service
+  become_user: docker
+  service: name=docker state=started enabled=yes
